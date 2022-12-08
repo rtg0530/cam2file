@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -6,8 +7,9 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 while cv2.waitKey(33) & 0xFF != ord('a'):
     ret, frame = cap.read()
+    image = frame.copy()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    ret, threshold = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+    ret, threshold = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for cnt in contours:
         area = cv2.contourArea(cnt)
@@ -21,3 +23,14 @@ while cv2.waitKey(33) & 0xFF != ord('a'):
 cap.release()
 cv2.destroyAllWindows()
 
+(x, y, w, _) = cv2.boundingRect(approx)
+h = round(w * 1.414)
+src = np.array([a[0] for a in approx], dtype=np.float32)
+dst = np.array([[0, 0], [0, h], [w, h], [w, 0]], dtype=np.float32)
+
+matrix = cv2.getPerspectiveTransform(src, dst)
+warped = cv2.warpPerspective(image, matrix, (w, h))
+
+cv2.imshow("warped", warped)
+cv2.waitKey()
+cv2.destroyAllWindows()
