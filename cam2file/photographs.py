@@ -1,9 +1,6 @@
 import core
 import cv2
 
-img = core.capturePaper()
-cv2.imwrite('C:/grayImage.png',img)
-
-def handle_image():
+def handle_image(a):
     img = core.capturePaper()
-    cv2.imwrite('C:/grayImage.png',img)
+    cv2.imwrite(a,img)
