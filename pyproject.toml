@@ -1,0 +1,6 @@
+[build-system]
+requires = [
+    "numpy>=1.21.6",
+    "opencv-python>=4.6.0.66"
+]
+build-backend = "setuptools.build_meta"
